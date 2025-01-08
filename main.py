@@ -55,3 +55,30 @@ df.select('Selecao Nome_FIFA Altura'.split()).show(5)
 df.select(col('Nome_FIFA'), col('Peso'), col('Altura')).show(5)
 
 df.show(5)
+# %%
+# Filtrar Dataframe
+df.filter('Selecao = "Brazil"').show(10)
+
+# Melhor forma de utilizar o filter
+df.filter(col('Nome na Camiseta') == "FRED").show()
+# %%
+# Filtrar DF com 2 condições (AND / &)
+df.filter((col('Selecao') == 'Argentina') &
+          (col('Altura') > 180) &
+          (col('Peso') >= 85)).show()
+
+df.filter(col('Selecao') == 'Brazil').filter(col('Numero') > 20).show()
+# %%
+# Filtrar DF com 2 condições ( OR / |)
+df.filter((col('Nome_FIFA') == 'MESSI Lionel') |
+          (col('Nome_FIFA') == 'SALVIO Eduardo') | 
+          (col('Altura') == 199 )).show()
+# %%
+# Filtrar DF Combinando & e | ( AND e OR )
+df.filter((col('Nome_FIFA') == 'MESSI Lionel') |
+          (col('Nome_FIFA') == 'SALVIO Eduardo') | 
+          (col('Altura') == 199 ) &
+          (col('Selecao') == 'Argentina')).show()
+
+df.filter((col('Selecao') == 'Brazil') & (col('Posicao') == 'DF') |
+          (col('Altura') == 199) & (col('Selecao') == 'Belgium')).show()
