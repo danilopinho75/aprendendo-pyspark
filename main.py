@@ -82,3 +82,42 @@ df.filter((col('Nome_FIFA') == 'MESSI Lionel') |
 
 df.filter((col('Selecao') == 'Brazil') & (col('Posicao') == 'DF') |
           (col('Altura') == 199) & (col('Selecao') == 'Belgium')).show()
+# %%
+# Criar novas colunas (usando função lit)
+df.withColumn('WorldCup', lit(2018)).show(5)
+# %%
+# Cria coluna condicional (usando função substring)
+df.withColumn('Sub', substring('Selecao', 1, 3)).show(5)
+
+df = df.withColumn('Ano', substring('Nascimento', -4, 4))
+df.show(5)
+# %%
+# Criar coluna condicional ( concat / concat_ws)
+df.withColumn('Concat', concat('Selecao', col('Nome na Camiseta'))).show(5)
+
+df.withColumn('Separador', concat_ws(' - ', 'Selecao', col('Nome na Camiseta'), col('Posicao'))).show(5)
+
+# %%
+# Alterar valor de string para inteiro
+df = df.withColumn('Ano', col('Ano').cast(IntegerType()))
+df.printSchema()
+# %%
+# Criar coluna de Dia e mês
+
+df = df.withColumn('Dia', split(col('Nascimento'), '\.')[0])
+df = df.withColumn('Mes', split(col('Nascimento'), '\.')[1])
+
+
+df.show(5)
+df.printSchema()
+
+# %%
+# Criar a coluna Data_Nascimento
+# df.show(5)
+df = df.withColumn('Data_Nascimento', concat_ws('-', col('Ano'), col('Mes'), col('Dia')))
+df.show(5)
+# %%
+# Transformar coluna como Data
+df = df.withColumn('Data_Nascimento', col('Data_Nascimento').cast(DateType()))
+df.show(5)
+df.printSchema()
