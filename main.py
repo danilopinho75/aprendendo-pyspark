@@ -15,3 +15,7 @@ spark = (
 )
 
 # %%
+# Ler arquivo
+df = spark.read.csv('dataset/wc2018-players.csv', header=True, inferSchema=True)
+df.show(5)
+# %%
