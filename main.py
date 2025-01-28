@@ -1,8 +1,16 @@
 # %%
 #importar bibliotecas
+import os
+import sys
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
+
+os.environ['PYSPARK_PYTHON'] = sys.executable
+os.environ['PYSPARK_DRIVER_PYTHON'] = sys.executable
+
+# Importar window functions
+from pyspark.sql.window import Window
 
 # %%
 # Iniciar Sessão do Spark
@@ -121,3 +129,18 @@ df.show(5)
 df = df.withColumn('Data_Nascimento', col('Data_Nascimento').cast(DateType()))
 df.show(5)
 df.printSchema()
+# %%
+# Deletar coluna (Drop)
+df = df.drop('Nascimento')
+df.show(5)
+# %%
+# Criar backup
+df2 = df
+df2.show(5)
+# %%
+# Window Function 1 - Número de linhas - row_number()
+
+# Agrupar por seleção
+param_row_number = Window.partitionBy('Selecao').orderBy(desc('Altura'))
+
+df.withColumn('numero_linha', row_number().over(param_row_number)).show(50)
